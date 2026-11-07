@@ -1,0 +1,341 @@
+/* The RevCube theme: black, white and the logo greys (#2b2b2b on light, #b2b2b2 on dark).
+   Loaded after the Webflow stylesheet and overrides its colour variables. */
+:root {
+  --revcube--ink: #2b2b2b;
+  --revcube--silver: #b2b2b2;
+
+  --ygn--cream: #ffffff;
+  --ygn--black: #0b0b0b;
+  --ygn--green: var(--revcube--silver);
+  --ygn--red: var(--revcube--silver);
+  --ygn--brown: var(--revcube--ink);
+  --ygn--brown--dark: #1f1f1f;
+  --ygn--brown--darker: #141414;
+  --ygn--dark-brown: #1a1a1a;
+  --ygn--brown--lighter: #f2f2f2;
+  --ygn--light-brown: #8a8a8a;
+  --bloom-grey: var(--revcube--silver);
+}
+
+/* Loading screen: black panel, white type */
+.loading-screen-bg { background-color: var(--ygn--black); }
+.loading-content { color: #ffffff; }
+
+/* Status dots. Selectors are one step more specific than the page's inline <style>, which loads later. */
+.footer .footer-bottom-block .dot { background-color: #ff4d4d; }
+.footer .footer-bottom-block.online .dot { background-color: #52fe8d; }
+.nav-wrap .dot-anime { animation-name: revcube-pulse; }
+@keyframes revcube-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(178, 178, 178, 0.5); }
+  100% { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0); }
+}
+
+/* Nav: Let’s Talk button in white on the bar; black inside the white menu panel so it stays visible */
+.nav-wrap .button-inner { background-color: #ffffff; color: var(--ygn--black); }
+.nav-wrap .nav-body-cta .button-inner { background-color: var(--ygn--black); color: #ffffff; }
+
+/* Nav: white dot marks the current item. Every top-level item has one; only .is-current shows it
+   (set by build.js, and moved on scroll by js/revcube.js). The underline follows the same item. */
+.menu-content .dot, .nav-links-list .dot { background-color: #ffffff; opacity: 0; transform: scale(0.4); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+.menu-content .is-current > .dot, .nav-links-list .is-current > .dot { opacity: 1; transform: scale(1); }
+.nav-links-list .dot { background-color: var(--ygn--black); }
+.menu-content .nav-link.for-dropdown .dot { margin-right: -0.7rem; }
+.menu-content .nav-link.w--current:not(.is-current) .border, .nav-links-list .w--current:not(.is-current) .border { transform: scaleX(0) !important; }
+.menu-content .nav-link.is-current .border, .nav-links-list .is-current .border { transform: scaleX(1) !important; }
+
+/* Logo (inline SVG, coloured by currentColor) */
+.revcube-logo { display: block; width: 100%; height: auto; }
+.nav-brand-text { width: 8.75rem; line-height: 0; }
+.footer-yugen-text { width: min(100%, 46rem); height: auto; padding-bottom: 1rem; line-height: 0; color: var(--revcube--silver); }
+
+/* The collapsed desktop nav is 10vw wide, too narrow for the wordmark plus the menu icon. */
+@media screen and (min-width: 767px) {
+  .nav-wrap.scrolled:not(.open) .nav { width: max(10vw, 14rem); }
+}
+
+/* Services dropdown: size to the service names instead of the fixed 9.375rem column, with room between items. */
+.menu-content .dropdown-list { width: auto; min-width: 16rem; padding: 1.5rem 1.75rem; gap: 1rem; }
+.menu-content .dropdown-link { white-space: nowrap; line-height: 1.2; }
+
+@media screen and (max-width: 767px) {
+  .nav-brand-text { width: 7.5rem; }
+  /* Room for the larger wordmark plus the menu icon in the closed phone bar. */
+  .nav-wrap:not(.open) .nav { width: 13rem; }
+  .footer-yugen-text { width: 70%; }
+}
+
+/* Home "What We Do": service cards in a 3-column grid, alternating grey and white */
+.revcube-service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.revcube-service-card { display: flex; flex-direction: column; gap: 0.9rem; padding: 2rem 1.75rem; border: 1px solid var(--ygn--light-grey); border-radius: 0.75rem; background-color: #ffffff; color: var(--ygn--black); text-decoration: none; transition: border-color .3s var(--ease); }
+.revcube-service-card:nth-child(odd) { background-color: #f3f3f3; }
+.revcube-service-card:hover { border-color: var(--ygn--black); }
+.revcube-service-icon { width: 1.75rem; height: 1.75rem; margin-bottom: 0.5rem; line-height: 0; }
+.revcube-service-icon svg { width: 100%; height: 100%; }
+.revcube-service-title { margin: 0; font-size: 1.75rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; }
+.revcube-service-text { margin: 0; max-width: 26rem; font-size: 1rem; line-height: 1.5; }
+.revcube-service-more { display: flex; align-items: center; gap: 0.4rem; margin-top: auto; padding-top: 0.75rem; color: var(--ygn--ash); font-family: Ibmplexmono, sans-serif; font-size: 0.75rem; text-transform: uppercase; transition: color .3s; }
+.revcube-service-arrow { width: 0.85rem; line-height: 0; transition: transform .3s var(--ease); }
+.revcube-service-arrow svg { width: 100%; height: auto; }
+.revcube-service-card:hover .revcube-service-more { color: var(--ygn--black); }
+.revcube-service-card:hover .revcube-service-arrow { transform: rotate(45deg); }
+/* Tighter gap between What We Do and the section after it (both paddings otherwise stack). */
+@media screen and (min-width: 768px) {
+  #services > .padding-section-large { padding-bottom: 4rem; }
+  #services + section > .padding-section-large { padding-top: 4.5rem; }
+}
+@media screen and (max-width: 767px) {
+  .revcube-service-grid { grid-template-columns: 1fr; }
+  .revcube-service-card { padding: 1.5rem 1.25rem; }
+  .revcube-service-title { font-size: 1.375rem; }
+}
+
+/* Featured Work: summary card shown on hover in the empty space beside the image, joined to it by a
+   curved connector. Background matches the nav and dropdown (40% white, 30px blur); a light border and
+   shadow give it an edge on the white page. Odd items sit right (card on the left), even items left. */
+.work-block.has-summary { --summary-gap: 5rem; --summary-width: min(34rem, calc(40vw - 6.5rem)); }
+.revcube-work-summary {
+  position: absolute; top: 50%; right: calc(100% + var(--summary-gap)); z-index: 4;
+  width: var(--summary-width); padding: 2.25rem; border-radius: .63rem;
+  background-color: var(--white--40); -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
+  border: 1px solid rgba(11, 11, 11, 0.08); box-shadow: 0 1.5rem 3rem rgba(11, 11, 11, 0.08);
+  opacity: 0; transform: translate(1rem, -50%); pointer-events: none;
+  transition: opacity .4s var(--ease), transform .5s var(--ease);
+}
+[work-list] [work-item]:nth-child(even) .revcube-work-summary { right: auto; left: calc(100% + var(--summary-gap)); transform: translate(-1rem, -50%); }
+.work-block.has-summary:hover .revcube-work-summary { opacity: 1; transform: translate(0, -50%); pointer-events: auto; }
+.revcube-work-summary-head { white-space: nowrap; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.75rem; }
+.revcube-work-pill { padding: .45rem .85rem; border-radius: .25rem; background-color: var(--ygn--black); color: #ffffff; font-size: .95rem; line-height: 1.2; white-space: nowrap; }
+.revcube-work-summary-title { margin: 0 0 .9rem; font-size: 2.125rem; font-weight: 500; line-height: 1.15; }
+.revcube-work-summary-text { margin: 0; color: var(--ygn--dark-gray); font-size: 1.2rem; line-height: 1.5; }
+
+/* Connector: from the card's edge to the image's edge; drawn in on hover. */
+.revcube-work-connector { position: absolute; top: 0; bottom: 0; left: 100%; width: var(--summary-gap); pointer-events: none; }
+[work-list] [work-item]:nth-child(even) .revcube-work-connector { left: auto; right: 100%; transform: scaleX(-1); }
+.revcube-work-connector svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.revcube-work-connector path { fill: none; stroke: var(--ygn--black); stroke-width: 1.5; stroke-dasharray: 200; stroke-dashoffset: 200; transition: stroke-dashoffset .7s var(--ease) .1s; }
+.work-block.has-summary:hover .revcube-work-connector path { stroke-dashoffset: 0; }
+.revcube-work-port { position: absolute; width: .6rem; height: .6rem; border-radius: 50%; background-color: #ffffff; border: 2px solid var(--ygn--black); transform: translate(-50%, -50%); }
+.revcube-work-port.is-card { left: 0; top: 62%; }
+.revcube-work-port.is-image { left: 100%; top: 38%; }
+
+/* Phones have no hover and no side space: show the summary under the project instead. */
+@media screen and (max-width: 767px) {
+  .revcube-work-summary, [work-list] [work-item]:nth-child(even) .revcube-work-summary { position: static; order: 3; width: auto; opacity: 1; transform: none; pointer-events: auto; padding: 1.25rem; box-shadow: none; }
+  .revcube-work-connector { display: none; }
+}
+
+/* Home "Why Choose": numbered list rows on light grey (number, title, detail).
+   Hover: the row pops up from its centre - slightly larger, darker, rounded, lifted. */
+.revcube-list-section { background-color: #efefef; }
+.revcube-list-caption { margin: 0 0 3.5rem; text-align: center; color: var(--ygn--dark-gray); font-size: .9rem; font-weight: 600; letter-spacing: .02em; line-height: 1.4; text-transform: uppercase; }
+.revcube-list { border-top: 1px solid #dddddd; }
+.revcube-list-row {
+  position: relative; display: grid; grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 32rem); align-items: center; gap: 1.5rem;
+  min-height: 6.25rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid #dddddd; border-radius: 0;
+  transform-origin: center; transition: transform .45s var(--ease), background-color .3s, border-radius .3s, box-shadow .45s var(--ease);
+}
+.revcube-list-row:hover { z-index: 1; transform: scale(1.012); background-color: #e3e3e3; border-color: transparent; border-radius: .6rem; box-shadow: 0 .9rem 2.25rem rgba(11, 11, 11, .08); }
+.revcube-list-no { color: var(--ygn--ash); font-family: Ibmplexmono, sans-serif; font-size: .75rem; }
+.revcube-list-title { margin: 0; font-size: 1.05rem; font-weight: 600; letter-spacing: .01em; line-height: 1.3; text-transform: uppercase; }
+.revcube-list-detail { margin: 0; color: var(--ygn--dark-gray); font-size: .8rem; letter-spacing: .02em; line-height: 1.5; text-align: right; text-transform: uppercase; }
+/* Hover image: a tilted photo floating in the centre of the row, overlapping the rows around it. */
+.revcube-list-media { position: absolute; top: 50%; left: 50%; z-index: 2; width: 17rem; aspect-ratio: 4 / 3; border-radius: .6rem; overflow: hidden; pointer-events: none;
+  box-shadow: 0 1.25rem 3rem rgba(11, 11, 11, .22); opacity: 0;
+  --tilt: -5deg; transform: translate(-50%, -50%) rotate(var(--tilt)) scale(.8);
+  transition: opacity .35s var(--ease), transform .55s var(--ease); }
+.revcube-list-row:nth-child(even) .revcube-list-media { --tilt: 5deg; }
+.revcube-list-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.revcube-list-row:hover .revcube-list-media { opacity: 1; transform: translate(-50%, -50%) rotate(var(--tilt)) scale(1); }
+@media (prefers-reduced-motion: reduce) { .revcube-list-row:hover { transform: none; } .revcube-list-media { transition: opacity .2s; } }
+@media screen and (max-width: 767px) {
+  .revcube-list-caption { margin-bottom: 2rem; }
+  .revcube-list-row { grid-template-columns: 2.25rem minmax(0, 1fr); gap: .3rem 1rem; min-height: 0; padding: 1.1rem .5rem; }
+  .revcube-list-no { grid-row: span 2; }
+  .revcube-list-media { display: none; }
+  .revcube-list-title { align-self: end; font-size: .95rem; }
+  .revcube-list-detail { grid-column: 2; align-self: start; text-align: left; font-size: .75rem; }
+}
+
+/* Tools strip: small brand icon + name in each logo box */
+.revcube-tool { display: flex; align-items: center; justify-content: center; gap: .7rem; color: var(--ygn--black); }
+.revcube-tool-icon { flex: none; width: 1.6rem; height: 1.6rem; }
+.revcube-tool span { font-size: 1.05rem; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
+@media screen and (max-width: 767px) {
+  .revcube-tool { gap: .5rem; }
+  .revcube-tool-icon { width: 1.25rem; height: 1.25rem; }
+  .revcube-tool span { font-size: .9rem; }
+}
+
+/* About section: the kicker + badge block is a link */
+.revcube-intro-link { color: inherit; text-decoration: none; }
+.revcube-intro-link .award-text-block > :first-child { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 0.2em; transition: text-decoration-color .3s; }
+.revcube-intro-link:hover .award-text-block > :first-child { text-decoration-color: currentColor; }
+
+/* Footer heading row: round contact icons where the original had certification logos */
+.footer .footer-head { margin-top: 2.5rem; }
+.revcube-contact-icons { gap: 1.25rem; }
+.revcube-contact-icon { display: flex; align-items: center; justify-content: center; width: 4.5rem; height: 4.5rem; border: 1px solid rgba(255, 255, 255, .35); border-radius: 50%; color: #ffffff; transition: background-color .3s, color .3s, border-color .3s; }
+.revcube-contact-icon svg { width: 1.6rem; height: 1.6rem; }
+.revcube-contact-icon:hover { background-color: #ffffff; border-color: #ffffff; color: var(--ygn--black); }
+@media screen and (max-width: 767px) {
+  .revcube-contact-icon { width: 3.5rem; height: 3.5rem; }
+  .revcube-contact-icon svg { width: 1.3rem; height: 1.3rem; }
+}
+
+/* Switched-off links (site.homeLinksOnly): keep their look but not a pointer cursor */
+[data-link-off] { cursor: default; }
+
+/* Footer contact block */
+.revcube-contact { margin-bottom: 3rem; }
+.revcube-address { max-width: 22rem; margin: 0.25rem 0 0; }
+/* Addresses are Google Maps links: block-level like the old paragraph, white on hover */
+a.revcube-address { display: block; text-decoration: none; transition: color .3s; }
+a.revcube-address:hover { color: var(--ygn--white); }
+
+/* ---- Layout glue for content-driven pages (build.js). Reuses existing components; only spacing/arrangement here. ---- */
+.section-hero { background-color: var(--ygn--black); }
+/* Hero headlines from the content document run longer than the original two-line tagline. */
+.revcube-hero-heading { max-width: 72rem; font-size: 5.25rem; }
+/* Short taglines keep the original hero size. */
+.revcube-hero-heading.is-short { max-width: 57rem; font-size: 7.5rem; }
+.section-hero .hero-text-block { gap: 2rem; padding-top: 4rem; }
+/* Home hero subtitle: two balanced lines at every width. */
+[data-barba-namespace="home"] .revcube-hero-body { text-wrap: balance; }
+@media screen and (max-width: 767px) {
+  .revcube-hero-heading { font-size: 2.5rem; }
+  .revcube-hero-heading.is-short { font-size: 3rem; }
+  [data-barba-namespace="home"] .revcube-hero-body { font-size: min(1.2rem, 3.9vw); max-width: none; }
+  /* Stack text and tags instead of overlaying them, so long copy never collides on phones. */
+  .section-hero .hero-content { height: auto; min-height: 100svh; flex-direction: column; justify-content: center; gap: 2.5rem; padding-top: 7rem; }
+  .section-hero .hero-text-block { position: relative; padding-top: 0; }
+  .section-hero .hero-bottom { margin-top: 0; }
+  .revcube-breadcrumb { font-size: 0.7rem; flex-wrap: wrap; justify-content: center; }
+}
+
+/* Hero and CTA button rows */
+.revcube-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+
+/* Breadcrumb on service pages (uses the hero's mono label style) */
+.revcube-breadcrumb { gap: 0.6rem; font-size: 0.875rem; }
+.revcube-breadcrumb a, .revcube-breadcrumb [data-link-off] { color: inherit; text-decoration: none; opacity: 0.7; transition: opacity .25s; }
+.revcube-breadcrumb a:hover, .revcube-breadcrumb [data-link-off]:hover { opacity: 1; }
+
+/* Process cards: the original was built for 3 steps. Keep the open card about half the row
+   for 4-6 steps, size its paragraph to fit, and cycle the three card greys. */
+.slide-cards .slide-card:nth-child(3n+1) .slide-card-inner { background-color: var(--ygn--brown); }
+.slide-cards .slide-card:nth-child(3n+2) .slide-card-inner { background-color: var(--ygn--brown--dark); }
+.slide-cards .slide-card:nth-child(3n) .slide-card-inner { background-color: var(--ygn--brown--darker); }
+@media screen and (min-width: 768px) {
+  .revcube-steps-4 .slide-card.active { flex: 1.8; }
+  .revcube-steps-5 .slide-card.active { flex: 2.4; }
+  .revcube-steps-6 .slide-card.active { flex: 3; }
+  .revcube-steps-4 .slide-card-para, .revcube-steps-5 .slide-card-para, .revcube-steps-6 .slide-card-para { width: 36vw; }
+  .revcube-steps-4 .text-style-display, .revcube-steps-5 .text-style-display, .revcube-steps-6 .text-style-display { font-size: 4rem; }
+}
+
+/* Footer: list columns start at the top; Quick Links, Contact and the second office share the width,
+   with the two contact columns wider so the email address fits on one line. On phones each contact column takes a full row. */
+.revcube-footer-links { align-items: start; }
+/* Less empty space under the footer clocks */
+.footer { padding-bottom: 2.5rem; }
+@media screen and (min-width: 768px) {
+  /* The main contact column is only as wide as its content, so the second office sits a short gap after it */
+  .revcube-footer-links { width: 100%; grid-template-columns: minmax(9rem, 12.5rem) auto 1fr; }
+  .revcube-footer-links > .revcube-contact + .revcube-contact { padding-left: 4.5rem; }
+  /* The longer second-office address gets a wider line so it fits on two lines */
+  .revcube-contact + .revcube-contact .revcube-address { max-width: 30rem; }
+}
+/* Desktop: every column is as wide as its content, and Social follows the second office with the same
+   gap as Quick Links -> Contact. */
+@media screen and (min-width: 992px) {
+  .footer .grid-layout._8-4.for-footer { grid-template-columns: auto auto; justify-content: start; column-gap: 6rem; }
+  .footer .revcube-footer-links { width: auto; grid-template-columns: minmax(9rem, 12.5rem) auto auto; }
+}
+@media screen and (max-width: 767px) {
+  .revcube-footer-links { row-gap: 2.5rem; margin-bottom: 3rem; }
+  .revcube-footer-links > .revcube-contact { grid-column: span 2; margin-bottom: 0; }
+  .revcube-footer-links > .revcube-contact + .revcube-contact { margin-top: -1.25rem; }
+  .revcube-row-spacer { display: none; }
+  .revcube-footer-links > .revcube-contact + .revcube-contact > .text-style-kicker { display: none; }
+}
+/* Footer status clocks, one per office */
+/* The copyright row and Back to top line up with the first clock (Columbus); the Karachi clock sits below it */
+.footer .footer-bottom { align-items: flex-start; }
+.footer .footer-bottom > .back-to-top { min-height: 2.375rem; display: flex; align-items: center; }
+/* Copyright on the Columbus line, Privacy and Terms centred under it on the Karachi line */
+.footer .footer-bottom > .revcube-footer-meta { flex-direction: column; gap: 0.5rem; }
+.revcube-footer-meta > * { min-height: 2.375rem; display: flex; align-items: center; justify-content: center; }
+@media screen and (max-width: 767px) {
+  .footer .footer-bottom > .revcube-footer-meta { align-items: flex-start; }
+  .revcube-footer-meta > * { justify-content: flex-start; min-height: 0; }
+}
+.revcube-status-blocks { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+.revcube-footer-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.5rem 1.5rem; }
+.revcube-legal { display: flex; gap: 1.5rem; }
+.revcube-legal a, .revcube-legal [data-link-off] { color: var(--ygn--ash); text-decoration: none; transition: color .3s; }
+.revcube-legal a:hover, .revcube-legal [data-link-off]:hover { color: var(--ygn--white); }
+
+/* Several testimonials: the review card in a wrapping grid */
+.revcube-reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: 1.25rem; }
+.revcube-reviews .review { position: relative; inset: auto; width: auto; margin: 0; border: 1px solid var(--ygn--light-grey); }
+.revcube-quote { font-size: 1.75rem; line-height: 1.25; }
+
+@media screen and (max-width: 767px) {
+  .revcube-reviews { grid-template-columns: 1fr; }
+  .revcube-review-single .review { position: relative; width: auto; margin: 1rem; }
+  .revcube-quote { font-size: 1.25rem; }
+}
+
+/* ---------------------------------------------------------------------------
+   About Us page (about-us.html)
+   --------------------------------------------------------------------------- */
+/* Dark statement: grey paragraphs, highlighted phrases in white */
+.revcube-statement, .revcube-offices-section { color: #ffffff; }
+.revcube-statement-body { display: flex; flex-direction: column; gap: 1em; font-size: clamp(2rem, 3.45vw, 4.25rem); letter-spacing: -.02em; line-height: 1.12; }
+.revcube-statement-body .revcube-statement-text { font-size: inherit; line-height: inherit; }
+/* Scroll highlight: words start grey and turn white as the section is read */
+.revcube-word { color: #6e6e6e; transition: color .25s ease; }
+.revcube-word.is-lit { color: #ffffff; }
+.revcube-statement-text { margin: 0; color: #7a7a7a; }
+.revcube-statement-strong { color: #ffffff; }
+
+/* Values: sticky number badge + large value names on the left; large text above a wide image on the right */
+.revcube-values { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; align-items: start; }
+.revcube-values-head { position: sticky; top: 8rem; display: flex; flex-direction: column; align-items: flex-start; gap: 2.75rem; }
+.revcube-values-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 3.9rem; height: 3.9rem; padding: 0 1rem; border-radius: .4rem; background-color: #ececec; color: var(--ygn--black); font-family: Ibmplexmono, sans-serif; font-size: 1.25rem; }
+.revcube-values-badge.for-row, .revcube-values-row-title { display: none; }
+.revcube-values-names { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 1.6rem; }
+.revcube-values-name { font-size: clamp(2.25rem, 2.9vw, 3.25rem); letter-spacing: -.02em; line-height: 1.1; color: #b9b9b9; transition: color .4s var(--ease); }
+.revcube-values-name.is-active { color: var(--ygn--black); }
+.revcube-values-rows { display: flex; flex-direction: column; gap: 7rem; }
+.revcube-values-row { display: flex; flex-direction: column; gap: 2.25rem; }
+.revcube-values-text { margin: 0; font-size: clamp(1.4rem, 1.95vw, 2.15rem); letter-spacing: -.01em; line-height: 1.22; color: var(--ygn--black); }
+.revcube-values-media { position: relative; aspect-ratio: 4 / 3; border-radius: .63rem; overflow: hidden; background-color: #ececec; }
+.revcube-values-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Offices: one card per office with its local time */
+.revcube-offices { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1.25rem; }
+.revcube-office { display: flex; flex-direction: column; gap: 1rem; padding: 2.25rem; border: 1px solid rgba(255, 255, 255, .14); border-radius: .63rem; background-color: rgba(255, 255, 255, .03); }
+.revcube-office-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.revcube-office-status { display: inline-flex; align-items: center; gap: .5rem; font-family: Ibmplexmono, sans-serif; font-size: .75rem; }
+.revcube-office-city { font-size: 2.75rem; line-height: 1.1; }
+.revcube-office-time { font-family: Ibmplexmono, sans-serif; font-size: 1.25rem; color: #b2b2b2; }
+.revcube-office p { margin: 0; }
+.revcube-offices-section .impact-card { border-color: rgba(255, 255, 255, .14); }
+
+@media screen and (max-width: 991px) {
+  /* Stacked: no sticky list; each block shows its own number badge instead */
+  .revcube-values { grid-template-columns: 1fr; }
+  .revcube-values-head { display: none; }
+  .revcube-values-badge.for-row { display: inline-flex; align-self: flex-start; min-width: 3rem; height: 3rem; font-size: 1rem; }
+  .revcube-values-row-title { display: block; margin: -.25rem 0 0; font-size: 2rem; font-weight: 400; letter-spacing: -.02em; line-height: 1.1; }
+}
+@media screen and (max-width: 767px) {
+  .revcube-statement-body { font-size: 1.9rem; line-height: 1.15; }
+  .revcube-values-rows { gap: 3.5rem; }
+  .revcube-values-row { gap: 1.25rem; }
+  .revcube-values-text { font-size: 1.35rem; }
+  .revcube-offices { grid-template-columns: 1fr; }
+  .revcube-office { padding: 1.5rem; }
+  .revcube-office-city { font-size: 2rem; }
+}
