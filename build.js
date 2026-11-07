@@ -309,7 +309,16 @@ function offices(s) {
   return `<section${attrs({ id: s.id })} theme-dark="" class="section background-color-black revcube-offices-section"><div class="padding-global padding-section-large"><div class="flex-verti gap-6-25rem"><div class="flex-verti gap-1-87rem">${s.kicker ? kicker(s.kicker) : ''}<h2 class="heading-style-h1 revcube-statement-text max-width-xlarge">${text}</h2></div><div class="revcube-offices">${cards}</div>${s.stats ? statGrid(s.stats) : ''}</div></div></section>`;
 }
 
-const renderers = { logos, intro, showreel, serviceCards, steps, work, industries, list, accordion, cards, testimonials, statement, values, offices };
+// Process tabs: one image per step on the left (cross-fading), the steps on the right. The active step shows
+// its description and a progress bar; when the bar is full js/revcube.js opens the next step. Click to jump.
+function process(s) {
+  const pics = s.items.map((item, i) => `<img src="${img(item.image || `images/placeholder-how-${slugify(item.title)}.svg`, item.title)}" loading="lazy" alt="${esc(item.title)}" class="revcube-process-img${i === 0 ? ' is-active' : ''}">`).join('');
+  const steps = s.items.map((item, i) => `<div class="revcube-process-item${i === 0 ? ' is-active' : ''}"><h3 class="revcube-process-title"><button type="button" class="revcube-process-btn" aria-expanded="${i === 0}">${esc(item.title)}</button></h3><div class="revcube-process-body"><div><p>${esc(item.description)}</p></div></div><div class="revcube-process-bar" aria-hidden="true"><div class="revcube-process-fill"></div></div></div>`).join('');
+  const head = sectionHead({ eyebrow: s.eyebrow, headline: s.headline });
+  return `<section${attrs({ id: s.id })} class="section"><div class="padding-global padding-section-large"><div class="flex-verti gap-6-25rem">${head}<div process-tabs="" class="revcube-process"><div class="revcube-process-media">${pics}</div><div class="revcube-process-list">${steps}</div></div></div></div></section>`;
+}
+
+const renderers = { logos, intro, showreel, serviceCards, steps, work, industries, list, accordion, cards, testimonials, statement, values, offices, process };
 
 // ---------------------------------------------------------------------------
 // Global: footer (with the page's call to action)

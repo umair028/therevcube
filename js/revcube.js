@@ -69,11 +69,45 @@
     });
   }
 
+  // About page "How We Work": open one step (its image fades in and its bar starts filling).
+  function openStep(tabs, index) {
+    var items = tabs.querySelectorAll('.revcube-process-item');
+    var imgs = tabs.querySelectorAll('.revcube-process-img');
+    index = (index + items.length) % items.length;
+    items.forEach(function (it, i) {
+      var on = i === index;
+      if (on && it.classList.contains('is-active')) { it.classList.remove('is-active'); void it.offsetWidth; } // restart the bar
+      it.classList.toggle('is-active', on);
+      it.querySelector('.revcube-process-btn').setAttribute('aria-expanded', on);
+    });
+    imgs.forEach(function (im, i) { im.classList.toggle('is-active', i === index); });
+  }
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.revcube-process-btn');
+    if (!btn) return;
+    var tabs = btn.closest('[process-tabs]');
+    openStep(tabs, Array.prototype.indexOf.call(tabs.querySelectorAll('.revcube-process-btn'), btn));
+  });
+  // A full bar opens the next step (after the last, back to the first).
+  document.addEventListener('animationend', function (e) {
+    if (!e.target.classList || !e.target.classList.contains('revcube-process-fill')) return;
+    var tabs = e.target.closest('[process-tabs]');
+    var items = Array.prototype.slice.call(tabs.querySelectorAll('.revcube-process-item'));
+    openStep(tabs, items.indexOf(e.target.closest('.revcube-process-item')) + 1);
+  });
+  // The bars only run while the section is on screen.
+  function updateProcessPause() {
+    document.querySelectorAll('[process-tabs]').forEach(function (tabs) {
+      var r = tabs.getBoundingClientRect();
+      tabs.classList.toggle('is-paused', r.bottom < window.innerHeight * 0.2 || r.top > window.innerHeight * 0.8);
+    });
+  }
+
   var navDotQueued = false;
   window.addEventListener('scroll', function () {
     if (navDotQueued) return;
     navDotQueued = true;
-    requestAnimationFrame(function () { navDotQueued = false; updateNavDot(); updateValues(); updateScrollHighlight(); });
+    requestAnimationFrame(function () { navDotQueued = false; updateNavDot(); updateValues(); updateScrollHighlight(); updateProcessPause(); });
   }, { passive: true });
 
   // Industries slider: the remote script starts Swiper with the default 3s pause between slides;
@@ -105,6 +139,7 @@
     updateNavDot();
     updateValues();
     updateScrollHighlight();
+    updateProcessPause();
     tuneSlider();
   }
   tick();

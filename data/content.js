@@ -380,12 +380,14 @@ const pages = [
         { title: 'Driven by craft', image: 'images/why-creative-excellence.jpg', description: 'Every logo, page and frame is made with care. We sweat the details your customers notice, and the ones they only feel, so your brand looks as good as your product is.' },
         { title: 'Powered by partnership', image: 'images/why-strategic-approach.jpg', description: 'We work as an extension of your team, not a vendor on the side. You get clear communication, real collaboration and people who care about your brand as much as you do.' },
       ] },
-      { type: 'accordion', eyebrow: 'How We Work', headline: 'We know what it takes to grow a brand. Here is how we do it.', items: [
-        { title: 'We start with strategy', description: 'Before we design anything, we learn your business, your audience and your competitors, so every decision is made for a reason.' },
-        { title: 'We build it together', description: 'You see the work early and often. Your feedback shapes every stage, so there are no surprises at launch.' },
-        { title: 'We connect every channel', description: 'Your logo, website, content and ads are designed as one system, so your brand feels consistent wherever customers find you.' },
-        { title: 'We launch, measure and improve', description: 'Launch day is the start. We track what performs, learn from the numbers and keep refining to grow your results.' },
-        { title: 'We deliver on time', description: 'Clear timelines, honest updates and work delivered when we said it would be. Every time.' },
+      // Image on the left, list on the right: the active step opens, its bar fills, then the next step opens
+      // (js/revcube.js). Images: free Unsplash stock photos (Unsplash License), images/how-<step>.jpg, added 2026-11-08.
+      { type: 'process', eyebrow: 'How We Work', headline: 'We know what it takes to grow a brand. Here is how we do it.', items: [
+        { title: 'We start with strategy', image: 'images/how-strategy.jpg', description: 'Before we design anything, we learn your business, your audience and your competitors, so every decision is made for a reason.' },
+        { title: 'We build it together', image: 'images/how-build-together.jpg', description: 'You see the work early and often. Your feedback shapes every stage, so there are no surprises at launch.' },
+        { title: 'We connect every channel', image: 'images/how-connect-channels.jpg', description: 'Your logo, website, content and ads are designed as one system, so your brand feels consistent wherever customers find you.' },
+        { title: 'We launch, measure and improve', image: 'images/how-launch-measure.jpg', description: 'Launch day is the start. We track what performs, learn from the numbers and keep refining to grow your results.' },
+        { title: 'We deliver on time', image: 'images/how-on-time.jpg', description: 'Clear timelines, honest updates and work delivered when we said it would be. Every time.' },
       ] },
       { type: 'offices', kicker: 'One Team, Two Continents', headline: 'From **Columbus** to **Karachi**, our team works around the clock to move your brand forward.', stats: stats.home },
     ],
