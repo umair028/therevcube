@@ -243,7 +243,7 @@ const site = {
   // plain, non-clickable elements. Set to false to restore them all.
   // Exceptions (2026-10-22): the two office addresses in the footer still open Google Maps, and every email
   // link and button (Let's Talk, Let's Start a Project, Start a Project, the footer email and icon) opens an email.
-  // 2026-11-08: links to the About Us page (about-us.html) also stay clickable.
+  // 2026-11-08: links to the About Us (about-us.html) and Contact (contact-us.html) pages also stay clickable.
   homeLinksOnly: true,
   contact,
   contactLink: CONTACT_LINK,
@@ -254,7 +254,7 @@ const site = {
       { label: 'Our Work', href: '/index.html#work' },
       { label: 'About Us', href: '/about-us.html' },
       // Blog removed at the user's request (2026-10-21).
-      { label: 'Contact', href: '#contact' },
+      { label: 'Contact', href: '/contact-us.html' },
     ],
     button: { label: 'Let’s Talk', href: CONTACT_LINK },
   },
@@ -266,7 +266,7 @@ const site = {
       { label: 'Home', href: '/index.html' },
       { label: 'Our Work', href: '/index.html#work' },
       { label: 'About Us', href: '/about-us.html' },
-      { label: 'Contact', href: '#contact' },
+      { label: 'Contact', href: '/contact-us.html' },
     ],
     // Footer heading row (added at the user's request, 2026-10-21; Services removed from Quick Links):
     // big links on the left, contact icons (email, phone, map) on the right.
@@ -392,6 +392,28 @@ const pages = [
       { type: 'offices', kicker: 'One Team, Two Continents', headline: 'From **Columbus** to **Karachi**, our team works around the clock to move your brand forward.', stats: stats.home },
     ],
     cta: { headline: 'Ready to Rev Your Brand Forward?', body: 'Tell us where you want to take your brand. We’ll show you how to get there.', buttons: [talk('Let’s Start a Project')] },
+  },
+
+  // Contact page (added at the user's request, 2026-11-08). Layout follows the original Contact page
+  // (heading, enquiry type, details and form, then a text marquee); copy written for The RevCube.
+  // There is no hero video: `meta` gives the page title and description instead.
+  // The form has no backend yet: sending opens the visitor's email app with the message filled in
+  // (js/revcube.js). Swap in a form service later by setting `action` on the contact section.
+  {
+    key: 'contact-us',
+    path: 'contact-us.html',
+    navKey: 'contact',
+    meta: { title: 'Contact Us', description: 'Tell us about your brand and your goals. The RevCube team will get back to you to talk about how we can help.' },
+    sections: [
+      { type: 'contact', id: 'enquiry', kicker: 'Contact', headline: 'Let’s talk about your brand.',
+        body: 'Tell us what you are working on and one of our team will be in touch.',
+        enquiryTypes: ['Project enquiry', 'General enquiry', 'Partnership', 'Careers'],
+        rating: { score: '5.0', text: 'Trusted by 100+ clients' },
+        serviceOptions: [...services.map(s => s.name), 'Not sure yet'],
+        submitLabel: 'Send Message' },
+      { type: 'textMarquee', text: 'Rev your brand forward' },
+    ],
+    cta: { headline: 'Prefer to Talk It Through?', body: 'Book a free consultation and we’ll walk through your goals, your timeline and how we can help.', buttons: [talk('Schedule a Free Consultation')] },
   },
 
   {

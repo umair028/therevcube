@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Builds the static site from data/content.js using the Webflow components in src/.
 // Usage: node build.js
-// Writes index.html, about-us.html and services/*.html, and creates any missing images/placeholder-*.svg files.
+// Writes index.html, about-us.html, contact-us.html and services/*.html, and creates any missing images/placeholder-*.svg files.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -318,7 +318,50 @@ function process(s) {
   return `<section${attrs({ id: s.id })} class="section"><div class="padding-global padding-section-large"><div class="flex-verti gap-6-25rem">${head}<div process-tabs="" class="revcube-process"><div class="revcube-process-media">${pics}</div><div class="revcube-process-list">${steps}</div></div></div></div></section>`;
 }
 
-const renderers = { logos, intro, showreel, serviceCards, steps, work, industries, list, accordion, cards, testimonials, statement, values, offices, process };
+// Contact page: heading and enquiry-type pills, details (rating, social, offices, email) on the left, the form
+// on the right. Without `action` the form opens the visitor's email app with the message (js/revcube.js).
+function contactForm(s) {
+  const c = site.contact;
+  const two = esc(s.headline) + (s.body ? ` <span class="text-color-ash">${esc(s.body)}</span>` : '');
+  const types = s.enquiryTypes.map((t, i) => `<label class="radio-btn revcube-radio"><input type="radio" form="revcube-contact-form" name="Enquiry type" value="${esc(t)}"${i === 0 ? ' checked=""' : ''}><span class="radio-btn-circle"><span class="radio-circle-active"></span></span><span>${esc(t)}</span></label>`).join('');
+  const block = (label, inner) => `<div class="flex-verti align-left revcube-contact-detail"><div class="text-style-kicker text-color-ash">${esc(label)}</div>${inner}</div>`;
+  const offices = [c, c.secondOffice].filter(Boolean).map(o => `<a href="${esc(o.mapUrl)}" target="_blank" rel="noopener" data-keep-link="" class="revcube-contact-office"><span class="text-color-black">${esc(o.officeLabel || o.label)}</span><span class="text-color-ash">${esc(o.address)}</span><span class="text-color-ash">${esc(o.phone)}</span></a>`).join('');
+  const details = [
+    s.rating ? block('Our Rating', `<div class="rating-component"><span class="revcube-stars" aria-hidden="true">★★★★★</span><span>${esc(s.rating.score)}</span><span class="text-color-ash">${esc(s.rating.text)}</span></div>`) : '',
+    block('Follow Us', `<div class="revcube-contact-social">${site.footer.social.map(l => `<a${attrs({ href: url(l.href), 'data-todo': l.todo, class: 'is-link' })}>${esc(l.label)}</a>`).join('')}</div>`),
+    block('Find Us', `<div class="revcube-contact-offices">${offices}</div>`),
+    block('Email Us', `<a href="mailto:${esc(c.email)}" class="text-size-body-xl is-link">${esc(c.email)}</a>`),
+  ].join('');
+  // Modern form card: floating labels (the label sits in the field and moves up on focus or once filled),
+  // Name/Email and Company/Phone side by side, services as multi-select chips, full-width send button.
+  const field = (name, label, { type = 'text', required = false, auto, area = false } = {}) => {
+    const id = `cf-${slugify(name)}`;
+    const control = area
+      ? `<textarea id="${id}" name="${esc(name)}" placeholder=" " rows="5"${required ? ' required=""' : ''}></textarea>`
+      : `<input id="${id}" type="${type}" name="${esc(name)}" placeholder=" "${auto ? ` autocomplete="${auto}"` : ''}${required ? ' required=""' : ''}>`;
+    return `<div class="revcube-field${area ? ' is-area' : ''}">${control}<label for="${id}">${esc(label)}${required ? '<span class="revcube-req" aria-hidden="true"> *</span>' : ''}</label></div>`;
+  };
+  const chips = s.serviceOptions.map(o => `<label class="revcube-chip"><input type="checkbox" name="Service" value="${esc(o)}"><span>${esc(o)}</span></label>`).join('');
+  const arrow = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const form = `<form${attrs({ id: 'revcube-contact-form', 'contact-form': true, 'data-email': c.email, action: s.action, method: s.action ? 'post' : undefined, class: 'revcube-form' })}>`
+    + `<div class="revcube-form-head"><span class="text-style-kicker text-color-ash">${esc(s.formKicker || 'Start a conversation')}</span><h2 class="revcube-form-title">${esc(s.formTitle || 'Tell us about your project')}</h2></div>`
+    + `<div class="revcube-form-row">${field('Name', 'Full name', { required: true, auto: 'name' })}${field('Email', 'Email address', { type: 'email', required: true, auto: 'email' })}</div>`
+    + `<div class="revcube-form-row">${field('Company', 'Company or brand', { auto: 'organization' })}${field('Phone', 'Phone (optional)', { type: 'tel', auto: 'tel' })}</div>`
+    + `<fieldset class="revcube-chips"><legend>What can we help with? <span class="text-color-ash">Pick all that apply</span></legend><div class="revcube-chip-list">${chips}</div></fieldset>`
+    + field('Message', 'Tell us about your project, goals and timeline', { required: true, area: true })
+    + `<div class="revcube-form-foot"><button type="submit" class="revcube-submit"><span>${esc(s.submitLabel)}</span><span class="revcube-submit-icon">${arrow}</span></button><p class="revcube-form-note text-color-ash">${esc(s.formNote || 'We only use your details to reply to your enquiry.')}</p></div>`
+    + `<p class="revcube-form-status" role="status" aria-live="polite"></p></form>`;
+  return `<section${attrs({ id: s.id })} class="section"><div class="padding-global for-hero bottom-7-79rem"><div class="flex-verti gap-1-87rem">${kicker(s.kicker)}<div class="grid-layout _5-6 revcube-contact-grid"><div class="flex-verti gap-3-75rem"><h1 class="text-color-black revcube-contact-heading">${two}</h1><fieldset class="buttons-wrap revcube-radios"><legend class="revcube-sr-only">Enquiry type</legend>${types}</fieldset><div class="divider-line"></div><div class="flex-verti gap-1-87rem">${details}</div></div><div class="forms-wrap">${form}</div></div></div></div></section>`;
+}
+
+// Scrolling uppercase text strip, the text repeated with a star between (CSS animation).
+function textMarquee(s) {
+  const star = '<svg viewBox="0 0 16 16" aria-hidden="true" class="revcube-marquee-star"><path d="M8 0c.6 4.4 3.6 7.4 8 8-4.4.6-7.4 3.6-8 8-.6-4.4-3.6-7.4-8-8 4.4-.6 7.4-3.6 8-8z" fill="currentColor"/></svg>';
+  const run = Array.from({ length: 8 }, () => `<span class="revcube-marquee-item">${star}${esc(s.text)}</span>`).join('');
+  return `<section class="section overflow-hidden revcube-marquee-section" aria-label="${esc(s.text)}"><div class="revcube-marquee" aria-hidden="true"><div class="revcube-marquee-track">${run}${run}</div></div></section>`;
+}
+
+const renderers = { logos, intro, showreel, serviceCards, steps, work, industries, list, accordion, cards, testimonials, statement, values, offices, process, contact: contactForm, textMarquee };
 
 // ---------------------------------------------------------------------------
 // Global: footer (with the page's call to action)
@@ -360,13 +403,13 @@ function footer(cta) {
 
 // With site.homeLinksOnly: every <a> that isn't the Home link becomes a <div> with the same classes
 // and content (so it looks the same but goes nowhere). Email links (mailto:, and blocks with data-mailto)
-// links marked data-keep-link (the office addresses) and links to the About Us page stay clickable.
+// links marked data-keep-link (the office addresses) and links to the About Us and Contact pages stay clickable.
 function homeLinksOnly(html) {
   const home = url('/index.html');
   return html
     .replace(/<a\b([^>]*)>([\s\S]*?)<\/a>/g, (whole, attrsText, inner) => {
       const href = (attrsText.match(/\shref="([^"]*)"/) || [])[1] || '';
-      if (href === home || href.startsWith('mailto:') || /(^|\/)about-us\.html$/.test(href) || /\sdata-keep-link="/.test(attrsText)) return whole;
+      if (href === home || href.startsWith('mailto:') || /(^|\/)(about|contact)-us\.html$/.test(href) || /\sdata-keep-link="/.test(attrsText)) return whole;
       const kept = attrsText.replace(/\s(href|target|rel|data-barba-prevent|data-todo|aria-current)="[^"]*"/g, '');
       return `<div${kept} data-link-off="">${inner}</div>`;
     });
@@ -376,8 +419,9 @@ function homeLinksOnly(html) {
 // Page shell
 // ---------------------------------------------------------------------------
 function document(p) {
-  const title = p.hero.headline + site.titleSuffix;
-  const description = p.hero.body + site.titleSuffix;
+  // Pages without a hero (Contact) give their title and description in `meta`.
+  const title = (p.meta ? p.meta.title : p.hero.headline) + site.titleSuffix;
+  const description = (p.meta ? p.meta.description : p.hero.body) + site.titleSuffix;
   const canonical = `${site.url}/${p.path === 'index.html' ? '' : p.path}`;
   const head = `<meta charset="utf-8"><title>${esc(title)}</title><meta content="${esc(description)}" name="description"><meta content="${esc(title)}" property="og:title"><meta content="${esc(description)}" property="og:description"><meta content="${site.url}/images/revcube-og.png" property="og:image"><meta content="${esc(title)}" name="twitter:title"><meta content="${esc(description)}" name="twitter:description"><meta property="og:type" content="website"><meta content="${esc(canonical)}" property="og:url"><meta content="summary_large_image" name="twitter:card"><meta content="width=device-width, initial-scale=1" name="viewport"><link href="${root}css/yugen5.shared.3377b735f.min.css" rel="stylesheet" type="text/css"><link href="${root}css/revcube-theme.css" rel="stylesheet" type="text/css"><script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script><link href="${root}images/revcube-favicon.svg" rel="icon" type="image/svg+xml"><link href="${root}images/revcube-favicon.png" rel="icon" type="image/png"><link href="${root}images/revcube-webclip.png" rel="apple-touch-icon"><link href="${esc(canonical)}" rel="canonical">${shell['head-style']}`;
   const loading = `<div loading-screen="" class="loading-screen"><div class="loading-screen-bg"></div><div class="loading-content"><div class="loading-texts"><div data-split="char">${esc(site.name)}</div></div><div class="loading-numbers"><span loading-counter="">0</span>%</div></div></div>`;
@@ -388,7 +432,7 @@ function document(p) {
   }).join('');
   const scripts = `<script src="${root}js/jquery-3.5.1.min.dc5e7f18c8.js" type="text/javascript"></script><script src="${root}js/yugen5.a0aa6ca1.b7683852b8a60d8e.js" type="text/javascript"></script><script defer="" src="https://yugen5.vercel.app/"></script><script src="${root}js/revcube.js"></script>`;
   // Barba page transitions drop the #hash, so links to a section on another page do a normal page load.
-  let body = `<body><div data-barba="wrapper" class="page">${shell['body-css']}${shell['rf-grid']}${loading}<main data-barba="container" data-barba-namespace="${esc(p.key)}" class="main">${nav()}${hero(p.hero)}${sections}${footer(p.cta)}</main><div page="" class="load-transition-screen"></div>${scripts}</div></body>`
+  let body = `<body><div data-barba="wrapper" class="page">${shell['body-css']}${shell['rf-grid']}${loading}<main data-barba="container" data-barba-namespace="${esc(p.key)}" class="main">${nav()}${p.hero ? hero(p.hero) : ''}${sections}${footer(p.cta)}</main><div page="" class="load-transition-screen"></div>${scripts}</div></body>`
     .replace(/<a\b([^>]*?) href="([^"#]+\.html#[^"]*)"/g, '<a$1 href="$2" data-barba-prevent="self"');
   if (site.homeLinksOnly) body = homeLinksOnly(body);
   return `<!DOCTYPE html>\n<!-- Generated by build.js from data/content.js. Edit the content file, then run: node build.js -->\n<html data-wf-domain="www.therevcube.com" data-wf-page="670420ce21fb6c1fb7b2d330" data-wf-site="670420cc21fb6c1fb7b2d08e" lang="en"><head>${head}</head>${body}</html>\n`;

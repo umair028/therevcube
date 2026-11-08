@@ -27,7 +27,7 @@
     if (!mains.length) return;
     var main = mains[mains.length - 1];
     var ns = main.getAttribute('data-barba-namespace');
-    var key = ns === 'home' || ns === 'about-us' ? ns : 'services';
+    var key = ns === 'home' || ns === 'about-us' ? ns : ns === 'contact-us' ? 'contact' : 'services';
     var line = window.innerHeight * 0.4;
     var contact = main.querySelector('#contact');
     if (key === 'home') {
@@ -102,6 +102,23 @@
       tabs.classList.toggle('is-paused', r.bottom < window.innerHeight * 0.2 || r.top > window.innerHeight * 0.8);
     });
   }
+
+  // Contact form: with no `action` set, sending opens the visitor's email app with the message filled in.
+  document.addEventListener('submit', function (e) {
+    var form = e.target.closest('[contact-form]');
+    if (!form || form.getAttribute('action')) return;
+    e.preventDefault();
+    var data = new FormData(form), lines = [];
+    ['Name', 'Email', 'Company', 'Phone'].forEach(function (k) { var v = String(data.get(k) || '').trim(); if (v) lines.push(k + ': ' + v); });
+    var services = data.getAll('Service');
+    if (services.length) lines.push('Services: ' + services.join(', '));
+    var subject = (data.get('Enquiry type') || 'Enquiry') + ' from ' + data.get('Name') + (data.get('Company') ? ' (' + data.get('Company') + ')' : '');
+    var body = lines.join('\n') + '\n\n' + data.get('Message');
+    var email = form.getAttribute('data-email');
+    window.location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    var status = form.querySelector('.revcube-form-status');
+    if (status) status.textContent = 'Your email app should open with your message ready to send. If it doesn’t, email us at ' + email + '.';
+  });
 
   var navDotQueued = false;
   window.addEventListener('scroll', function () {
