@@ -61,11 +61,11 @@
     document.querySelectorAll('[scroll-highlight]').forEach(function (block) {
       var words = block.querySelectorAll('.revcube-word');
       if (!words.length) return;
-      var r = block.getBoundingClientRect(), vh = window.innerHeight;
-      var start = vh * 0.85, end = vh * 0.35 - r.height * 0.5;
-      var p = Math.min(1, Math.max(0, (start - r.top) / (start - end)));
-      var lit = Math.round(p * words.length);
-      words.forEach(function (w, i) { w.classList.toggle('is-lit', i < lit); });
+      // Each word lights once it passes a reading line (65% down the screen), so the highlight follows
+      // the words on screen however long the text is; scrolling back up un-lights them.
+      var line = window.innerHeight * 0.65;
+      var tops = Array.prototype.map.call(words, function (w) { return w.getBoundingClientRect().top; });
+      words.forEach(function (w, i) { w.classList.toggle('is-lit', tops[i] < line); });
     });
   }
 
