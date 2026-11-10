@@ -63,10 +63,12 @@ const projects = {
   // The first three replaced Tawakkal Fabrics, Air Bazaar and Riva at the user's request (2026-10-21).
   // Images in images/projects/<slug>-<n>.jpg: free Unsplash stock photos (Unsplash License), except Wild Fern Designs (the user's own work).
   home: [
-    { title: 'Solenne Skincare', subtitle: 'eCommerce Development', ...projectImages('solenne-skincare'), tags: ['eCommerce', 'Branding', 'Packaging', 'Photography', 'SEO'], summary: 'A clean, conversion-focused online store for a skincare brand, with product pages that make every formula easy to understand and buy.' }, // DUMMY - replace later
     // Real project, images supplied by the user (2026-10-24); replaced the dummy coffee project Ember & Bean.
     { title: 'Wild Fern Designs', subtitle: 'Construction & Interior Design', ...projectImages('wild-fern-designs', 5), tags: ['Brand Identity', 'Website', 'Print Design', 'Logo Design', 'Mockups'], summary: 'A complete brand identity and website for a construction and interior design studio, carrying its fern monogram, deep green palette and refined type across web and print.' },
-    { title: 'Oakline Living', subtitle: 'Home & Living Store', ...projectImages('oakline-living'), tags: ['eCommerce', 'Website', 'Photography', 'Paid Ads'], summary: 'An online store for a home décor brand that presents each collection beautifully and turns browsing into checkout.' }, // DUMMY - replace later
+    // Real project, images supplied by the user (2026-11-11); replaced the dummy project Solenne Skincare.
+    { title: 'Royal Roast Co', subtitle: 'Coffee Brand Identity', ...projectImages('royal-roast-co', 5), tags: ['Brand Identity', 'Logo Design', 'Photography', 'Social Media'], summary: 'A bold navy and gold brand identity for a specialty coffee roaster, built around a lion crest logo and rich, moody coffee photography.' },
+    // Real project, images supplied by the user (2026-11-11); replaced the dummy project Oakline Living.
+    { title: 'DCFG', subtitle: 'Downtown Chicago Foodie Group', ...projectImages('dcfg', 7), tags: ['Brand Identity', 'Website Design', 'Hospitality', 'Subscription Publishing'], summary: 'A deep-green and gold brand identity and website for Downtown Chicago Foodie Group, a trade-exclusive subscription offering competitive analysis for Chicago\'s upscale restaurant scene.' },
     { title: 'HomeSync', subtitle: 'Web Design & Development', summary: 'A modern website for a smart-home brand that explains the product simply and drives more enquiries.' }, // DUMMY - replace later
   ],
   'logo-design-branding': [
@@ -371,9 +373,10 @@ const pages = [
     sections: [
       // Words light up one by one as the section scrolls through the screen, and fade back when scrolling up (js/revcube.js).
       { type: 'statement', id: 'story', kicker: 'Our Story', paragraphs: [
-        'The RevCube started with a simple frustration: great businesses were losing customers to brands that simply looked and marketed better.',
-        'Too many founders were juggling a designer here, a developer there and an agency somewhere else, with nothing working together. We built The RevCube to be one studio for everything a brand needs to grow.',
-        'Today we bring branding, websites, content and marketing under one roof, so every piece of your brand pulls in the same direction: forward.',
+        'The RevCube started with a simple frustration: great businesses were losing customers to brands that merely looked and sounded better.',
+        'Honestly, it didn’t begin as a grand mission. There are four of us, all with full-time jobs, who teamed up on the side to earn a little extra. But the deeper we got, the clearer it became — this wasn’t a side project. Building something real was the actual work, and we wanted to do it properly.',
+        'That’s when it clicked. We kept seeing the same thing: good businesses quietly losing customers, not because their product was weak, but because their brand was scattered. And between the four of us, we already covered the entire journey — one of us gets to the root of a client’s real problems, another turns the right conversations into partnerships, a third shows clients what will actually grow them, and the fourth makes sure we deliver everything we promise.',
+        'So we built The RevCube as a single studio where branding, websites, content, and marketing are made together, not stitched together. Every piece reinforces the next — the same way the four of us do — so your brand stops leaking customers and starts compounding. All pulling in the same direction: forward.',
       ] },
       { type: 'values', eyebrow: 'What Drives Us', headline: 'The values behind every project we take on.', items: [
         { title: 'Built on results', image: 'images/why-results-driven.jpg', description: 'Good design matters, but growth matters more. We measure our work by the traffic, leads and sales it brings, and we are honest about what is working and what is not.' },
