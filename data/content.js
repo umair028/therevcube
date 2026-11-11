@@ -324,7 +324,7 @@ const pages = [
       // Put The RevCube's own videos in videos/ and set the file names here.
       // Trimmed 2026-10-21 to end on the 4WARD shot (Yugen outro removed); originals are in
       // ../revcube-unused-files/videos-original/.
-      { type: 'showreel', preview: 'videos/showreel-preview.mp4', video: 'videos/showreel-full.mp4' },
+      { type: 'showreel', preview: 'videos/showreel-preview.mp4', video: 'videos/showreel-preview.mp4' },
       // `body` added at the user's request (2026-10-21); not in the document.
       { type: 'serviceCards', id: 'services', eyebrow: 'What We Do', headline: 'Solutions That Fuel Your Growth',
         body: 'From your logo to the campaign that launches it, every service is built to work together and help your brand look premium and sell more.',
