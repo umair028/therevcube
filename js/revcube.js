@@ -149,8 +149,12 @@
       var TZ = s.getAttribute('data-tz') || DEFAULT_TZ;
       var time = now.toLocaleTimeString('en-US', { timeZone: TZ, hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
       s.querySelectorAll('[la-time]').forEach(function (c) { c.textContent = time; });
-      var hour = parseInt(now.toLocaleString('en-US', { timeZone: TZ, hour12: false, hour: '2-digit' }), 10) % 24;
-      s.classList.toggle('online', hour >= OPEN_HOUR && hour < CLOSE_HOUR);
+      // Hours are read in data-open-tz when set (else the clock's own zone); open > close means the shift runs past midnight.
+      var HTZ = s.getAttribute('data-open-tz') || TZ;
+      var open = s.hasAttribute('data-open') ? +s.getAttribute('data-open') : OPEN_HOUR;
+      var close = s.hasAttribute('data-close') ? +s.getAttribute('data-close') : CLOSE_HOUR;
+      var hour = parseInt(now.toLocaleString('en-US', { timeZone: HTZ, hour12: false, hour: '2-digit' }), 10) % 24;
+      s.classList.toggle('online', open < close ? (hour >= open && hour < close) : (hour >= open || hour < close));
     });
     // Also catches Barba page swaps, which don't fire a scroll event.
     updateNavDot();

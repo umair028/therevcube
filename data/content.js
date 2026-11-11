@@ -16,7 +16,10 @@ const contact = {
   address: '7965 N High St, Ste 350, #303, Columbus, OH 43235',
   // Shown next to the footer clock; the clock runs on this office's time zone (work hours 9 AM - 6 PM, set in js/revcube.js).
   city: 'Columbus, US',
+  cityCode: 'US',
   timeZone: 'America/New_York',
+  // The US team covers the night shift in Pakistan: online from 6 PM to 6 AM Pakistan time (js/revcube.js reads these).
+  schedule: { timeZone: 'Asia/Karachi', open: 18, close: 6 },
   website: 'www.therevcube.com',
   mapUrl: 'https://www.google.com/maps/search/?api=1&query=7965+N+High+St,+Ste+350,+Columbus,+OH+43235',
   // Second office, shown in its own footer column next to the main contact details.
@@ -27,7 +30,19 @@ const contact = {
     address: 'Suite 111, Mezanine Floor, Anum Estate Building, Shahrah-e-Faisal, Karachi',
     mapUrl: 'https://www.google.com/maps/search/?api=1&query=Anum+Estate+Building,+Shahrah-e-Faisal,+Karachi',
     city: 'Karachi, PK',
+    cityCode: 'PK',
     timeZone: 'Asia/Karachi',
+  },
+  // Third office shown in a row under the main contact details in the footer.
+  thirdOffice: {
+    label: 'London Office',
+    phone: '+44 745-980-9983',
+    phoneHref: 'tel:+447459809983',
+    address: '5 Compton Rd, Leicester LE3 2AA, UK',
+    mapUrl: 'https://www.google.com/maps/search/?api=1&query=5+Compton+Rd,+Leicester+LE3+2AA,+UK',
+    city: 'London, UK',
+    cityCode: 'UK',
+    timeZone: 'Europe/London',
   },
 };
 
@@ -68,7 +83,7 @@ const projects = {
     // Real project, images supplied by the user (2026-11-11); replaced the dummy project Solenne Skincare.
     { title: 'Royal Roast Co', subtitle: 'Coffee Brand Identity', ...projectImages('royal-roast-co', 5), tags: ['Brand Identity', 'Logo Design', 'Photography', 'Social Media'], summary: 'A bold navy and gold brand identity for a specialty coffee roaster, built around a lion crest logo and rich, moody coffee photography.' },
     // Real project, images supplied by the user (2026-11-11); replaced the dummy project Oakline Living.
-    { title: 'DCFG', subtitle: 'Downtown Chicago Foodie Group', ...projectImages('dcfg', 7), tags: ['Brand Identity', 'Website Design', 'Hospitality', 'Subscription Publishing'], summary: 'A deep-green and gold brand identity and website for Downtown Chicago Foodie Group, a trade-exclusive subscription offering competitive analysis for Chicago\'s upscale restaurant scene.' },
+    { title: 'DCFG', subtitle: 'Downtown Chicago Foodie Group', ...projectImages('dcfg', 8), tags: ['Brand Identity', 'Website Design', 'Hospitality', 'Subscription Publishing'], summary: 'A deep-green and gold brand identity and website for Downtown Chicago Foodie Group, a trade-exclusive subscription offering competitive analysis for Chicago\'s upscale restaurant scene.' },
     { title: 'HomeSync', subtitle: 'Web Design & Development', summary: 'A modern website for a smart-home brand that explains the product simply and drives more enquiries.' }, // DUMMY - replace later
   ],
   'logo-design-branding': [
@@ -318,7 +333,7 @@ const pages = [
       { type: 'logos', logos: logoSets.tools },
       // The kicker + badge block links to the About Us page (about-us.html).
       { type: 'intro', id: 'about', kicker: 'About The RevCube', link: { href: '/about-us.html', label: 'About Us' },
-        badge: { title: 'Full-Service Creative Tech Studio', subtitle: 'Based in Columbus, US & Karachi, PK' },
+        badge: { title: 'Full-Service Creative Tech Studio', subtitle: 'Based in Columbus, US, Karachi, PK & London, UK' },
         statement: 'The RevCube is a **creative tech studio** helping brands look professional and sell more. From the logo to the website to the ads that bring customers in, we are **one studio** for every service your brand needs, built for a premium look and **measurable results.**' },
       // PLACEHOLDER - replace before publishing: this is Yugen's showreel (it shows their client work).
       // Put The RevCube's own videos in videos/ and set the file names here.
@@ -392,7 +407,7 @@ const pages = [
         { title: 'We launch, measure and improve', image: 'images/how-launch-measure.jpg', description: 'Launch day is the start. We track what performs, learn from the numbers and keep refining to grow your results.' },
         { title: 'We deliver on time', image: 'images/how-on-time.jpg', description: 'Clear timelines, honest updates and work delivered when we said it would be. Every time.' },
       ] },
-      { type: 'offices', kicker: 'One Team, Two Continents', headline: 'From **Columbus** to **Karachi**, our team works around the clock to move your brand forward.', stats: stats.home },
+      { type: 'offices', kicker: 'One Team, Three Continents', headline: 'From **Columbus** to **Karachi** to **London**, our team works around the clock to move your brand forward.', stats: stats.home },
     ],
     cta: { headline: 'Ready to Rev Your Brand Forward?', body: 'Tell us where you want to take your brand. We’ll show you how to get there.', buttons: [talk('Let’s Start a Project')] },
   },

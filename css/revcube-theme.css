@@ -240,16 +240,16 @@ a.revcube-address:hover { color: var(--ygn--white); }
 .footer { padding-bottom: 2.5rem; }
 @media screen and (min-width: 768px) {
   /* The main contact column is only as wide as its content, so the second office sits a short gap after it */
-  .revcube-footer-links { width: 100%; grid-template-columns: minmax(9rem, 12.5rem) auto 1fr; }
-  .revcube-footer-links > .revcube-contact + .revcube-contact { padding-left: 4.5rem; }
+  .revcube-footer-links { width: 100%; grid-template-columns: minmax(9rem, 12.5rem) repeat(3, auto); column-gap: 2.5rem; }
+  .revcube-footer-links > .revcube-contact + .revcube-contact { padding-left: 0; }
   /* The longer second-office address gets a wider line so it fits on two lines */
-  .revcube-contact + .revcube-contact .revcube-address { max-width: 30rem; }
+  .revcube-footer-links .revcube-address { max-width: 17rem; }
 }
 /* Desktop: every column is as wide as its content, and Social follows the second office with the same
    gap as Quick Links -> Contact. */
 @media screen and (min-width: 992px) {
   .footer .grid-layout._8-4.for-footer { grid-template-columns: auto auto; justify-content: start; column-gap: 6rem; }
-  .footer .revcube-footer-links { width: auto; grid-template-columns: minmax(9rem, 12.5rem) auto auto; }
+  .footer .revcube-footer-links { width: auto; grid-template-columns: minmax(9rem, 12.5rem) repeat(3, auto); column-gap: 2.5rem; }
 }
 @media screen and (max-width: 767px) {
   .revcube-footer-links { row-gap: 2.5rem; margin-bottom: 3rem; }
@@ -258,20 +258,19 @@ a.revcube-address:hover { color: var(--ygn--white); }
   .revcube-row-spacer { display: none; }
   .revcube-footer-links > .revcube-contact + .revcube-contact > .text-style-kicker { display: none; }
 }
-/* Footer status clocks, one per office */
-/* The copyright row and Back to top line up with the first clock (Columbus); the Karachi clock sits below it */
-.footer .footer-bottom { align-items: flex-start; }
-.footer .footer-bottom > .back-to-top { min-height: 2.375rem; display: flex; align-items: center; }
-/* Copyright on the Columbus line, Privacy and Terms centred under it on the Karachi line */
-.footer .footer-bottom > .revcube-footer-meta { flex-direction: column; gap: 0.5rem; }
-.revcube-footer-meta > * { min-height: 2.375rem; display: flex; align-items: center; justify-content: center; }
+/* Footer status clocks: one under each office's address, all on the same line at the bottom of the column */
+.revcube-contact { display: flex; flex-direction: column; }
+.revcube-office-clock { margin-top: auto; padding-top: 0; align-self: flex-start; }
+.revcube-footer-links > .revcube-contact > .footer-links-list { margin-bottom: 1.5rem; }
+/* Bottom row: legal links left, copyright centred, Back to top right */
+.footer .footer-bottom { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.footer .footer-bottom > .revcube-legal { justify-self: start; display: flex; gap: 1.5rem; }
+.footer .footer-bottom > .revcube-copyright { justify-self: center; text-align: center; }
+.footer .footer-bottom > .back-to-top[back-to-top] { justify-self: end; }
 @media screen and (max-width: 767px) {
-  .footer .footer-bottom > .revcube-footer-meta { align-items: flex-start; }
-  .revcube-footer-meta > * { justify-content: flex-start; min-height: 0; }
+  .footer .footer-bottom { grid-template-columns: 1fr; row-gap: 1rem; }
+  .footer .footer-bottom > * { justify-self: start !important; text-align: left !important; }
 }
-.revcube-status-blocks { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-.revcube-footer-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.5rem 1.5rem; }
-.revcube-legal { display: flex; gap: 1.5rem; }
 .revcube-legal a, .revcube-legal [data-link-off] { color: var(--ygn--ash); text-decoration: none; transition: color .3s; }
 .revcube-legal a:hover, .revcube-legal [data-link-off]:hover { color: var(--ygn--white); }
 
@@ -446,4 +445,15 @@ a.revcube-address:hover { color: var(--ygn--white); }
   .revcube-contact-heading { font-size: 2.4rem; }
   .revcube-form { padding: 1.5rem; border-radius: 1rem; }
   .revcube-form-row { grid-template-columns: 1fr; }
+}
+
+/* Desktop: stretch the link columns to the full height of the row so every clock sits at the bottom, just above the divider line */
+@media screen and (min-width: 992px) {
+  .footer .grid-layout._8-4.for-footer { align-items: stretch; }
+  .footer .revcube-footer-links { align-items: stretch; align-content: stretch; }
+  .footer .revcube-footer-links > .revcube-contact { margin-bottom: 0; }
+}
+/* Pull the divider line closer to the clocks (cancels most of the 3.75rem gap above the line) */
+@media screen and (min-width: 992px) {
+  .footer .grid-layout._8-4.for-footer { margin-bottom: -2.25rem; }
 }
